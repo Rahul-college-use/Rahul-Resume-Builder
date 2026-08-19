@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import html2pdf from 'html2pdf.js';
 
-
 export default function ResumeBuilder() {
   const [data, setData] = useState({
     name: 'RAHUL KUMAR',
