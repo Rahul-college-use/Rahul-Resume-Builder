@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import html2pdf from 'html2pdf.js';
-import './ResumeBuilder.css';
+
 
 export default function ResumeBuilder() {
   const [data, setData] = useState({
