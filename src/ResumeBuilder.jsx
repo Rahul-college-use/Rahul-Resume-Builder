@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import html2pdf from 'html2pdf.js';
-// import './ResumeBuilder.css';
+import './ResumeBuilder.css';
 
 export default function ResumeBuilder() {
   const [data, setData] = useState({
@@ -90,6 +90,47 @@ export default function ResumeBuilder() {
 
   const [downloading, setDownloading] = useState(false);
 
+  // Field change helpers
+  const handleEduChange = (idx, field, value) => {
+    const updated = [...data.education];
+    updated[idx][field] = value;
+    setData({ ...data, education: updated });
+  };
+
+  const handleSkillChange = (field, value) => {
+    setData({ ...data, skills: { ...data.skills, [field]: value } });
+  };
+
+  const handleProjectChange = (idx, field, value) => {
+    const updated = [...data.projects];
+    updated[idx][field] = value;
+    setData({ ...data, projects: updated });
+  };
+
+  const handleProjectBulletChange = (projIdx, bulletIdx, value) => {
+    const updated = [...data.projects];
+    updated[projIdx].bullets[bulletIdx] = value;
+    setData({ ...data, projects: updated });
+  };
+
+  const handleRespChange = (idx, field, value) => {
+    const updated = [...data.responsibilities];
+    updated[idx][field] = value;
+    setData({ ...data, responsibilities: updated });
+  };
+
+  const handleRespBulletChange = (respIdx, bulletIdx, value) => {
+    const updated = [...data.responsibilities];
+    updated[respIdx].bullets[bulletIdx] = value;
+    setData({ ...data, responsibilities: updated });
+  };
+
+  const handleAchievementChange = (idx, value) => {
+    const updated = [...data.achievements];
+    updated[idx] = value;
+    setData({ ...data, achievements: updated });
+  };
+
   const handleDownloadPDF = () => {
     const element = document.getElementById('resume-sheet');
     setDownloading(true);
@@ -115,94 +156,267 @@ export default function ResumeBuilder() {
 
   return (
     <div className="layout-container">
-      {/* Editor Sidebar */}
+      {/* Complete All-Field Editor Sidebar */}
       <div className="editor-sidebar no-print">
-        <h2 className="editor-title">A4 Resume Generator</h2>
+        <h2 className="editor-title">Resume Live Editor</h2>
 
-        <div className="field-group">
-          <label>Full Name</label>
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={data.name}
-            onChange={(e) => setData({ ...data, name: e.target.value })}
-          />
+        {/* 1. Header Information */}
+        <div className="editor-section-box">
+          <h3>Personal Details</h3>
+          <div className="field-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              value={data.name}
+              onChange={(e) => setData({ ...data, name: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
+            <label>Target Role / Subtitle</label>
+            <input
+              type="text"
+              value={data.title}
+              onChange={(e) => setData({ ...data, title: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
+            <label>Location</label>
+            <input
+              type="text"
+              value={data.location}
+              onChange={(e) => setData({ ...data, location: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
+            <label>Phone Number</label>
+            <input
+              type="text"
+              value={data.phone}
+              onChange={(e) => setData({ ...data, phone: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={data.email}
+              onChange={(e) => setData({ ...data, email: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
+            <label>LinkedIn URL</label>
+            <input
+              type="text"
+              value={data.linkedin}
+              onChange={(e) => setData({ ...data, linkedin: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
+            <label>GitHub URL</label>
+            <input
+              type="text"
+              value={data.github}
+              onChange={(e) => setData({ ...data, github: e.target.value })}
+            />
+          </div>
+          <div className="field-group">
+            <label>LeetCode URL</label>
+            <input
+              type="text"
+              value={data.leetcode}
+              onChange={(e) => setData({ ...data, leetcode: e.target.value })}
+            />
+          </div>
         </div>
 
-        <div className="field-group">
-          <label>Target Role / Subtitle</label>
-          <input
-            type="text"
-            placeholder="Aspiring Software Development Engineer"
-            value={data.title}
-            onChange={(e) => setData({ ...data, title: e.target.value })}
-          />
+        {/* 2. Summary */}
+        <div className="editor-section-box">
+          <h3>Summary</h3>
+          <div className="field-group">
+            <textarea
+              rows="4"
+              value={data.summary}
+              onChange={(e) => setData({ ...data, summary: e.target.value })}
+            />
+          </div>
         </div>
 
-        <div className="field-group">
-          <label>Location & Phone</label>
-          <input
-            type="text"
-            placeholder="City, State, Country"
-            value={data.location}
-            onChange={(e) => setData({ ...data, location: e.target.value })}
-            style={{ marginBottom: '6px' }}
-          />
-          <input
-            type="text"
-            placeholder="+91 00000 00000"
-            value={data.phone}
-            onChange={(e) => setData({ ...data, phone: e.target.value })}
-          />
+        {/* 3. Education */}
+        <div className="editor-section-box">
+          <h3>Education</h3>
+          {data.education.map((edu, idx) => (
+            <div key={idx} className="sub-item-box">
+              <label className="sub-label">Entry #{idx + 1}</label>
+              <input
+                type="text"
+                placeholder="Institution"
+                value={edu.institution}
+                onChange={(e) => handleEduChange(idx, 'institution', e.target.value)}
+                style={{ marginBottom: '4px' }}
+              />
+              <input
+                type="text"
+                placeholder="Degree / Percentage"
+                value={edu.degree}
+                onChange={(e) => handleEduChange(idx, 'degree', e.target.value)}
+                style={{ marginBottom: '4px' }}
+              />
+              <input
+                type="text"
+                placeholder="Duration (e.g. 2023 – 2027)"
+                value={edu.period}
+                onChange={(e) => handleEduChange(idx, 'period', e.target.value)}
+                style={{ marginBottom: '4px' }}
+              />
+              <input
+                type="text"
+                placeholder="Relevant Coursework (optional)"
+                value={edu.coursework}
+                onChange={(e) => handleEduChange(idx, 'coursework', e.target.value)}
+              />
+            </div>
+          ))}
         </div>
 
-        <div className="field-group">
-          <label>Email & Profile Links (Clickable in PDF)</label>
-          <input
-            type="email"
-            placeholder="Email Address"
-            value={data.email}
-            onChange={(e) => setData({ ...data, email: e.target.value })}
-            style={{ marginBottom: '6px' }}
-          />
-          <input
-            type="text"
-            placeholder="LinkedIn Profile URL"
-            value={data.linkedin}
-            onChange={(e) => setData({ ...data, linkedin: e.target.value })}
-            style={{ marginBottom: '6px' }}
-          />
-          <input
-            type="text"
-            placeholder="GitHub Profile URL"
-            value={data.github}
-            onChange={(e) => setData({ ...data, github: e.target.value })}
-            style={{ marginBottom: '6px' }}
-          />
-          <input
-            type="text"
-            placeholder="LeetCode Profile URL"
-            value={data.leetcode}
-            onChange={(e) => setData({ ...data, leetcode: e.target.value })}
-          />
+        {/* 4. Technical Skills */}
+        <div className="editor-section-box">
+          <h3>Technical Skills</h3>
+          <div className="field-group">
+            <label>Languages</label>
+            <input
+              type="text"
+              value={data.skills.languages}
+              onChange={(e) => handleSkillChange('languages', e.target.value)}
+            />
+          </div>
+          <div className="field-group">
+            <label>Web Technologies</label>
+            <input
+              type="text"
+              value={data.skills.webTech}
+              onChange={(e) => handleSkillChange('webTech', e.target.value)}
+            />
+          </div>
+          <div className="field-group">
+            <label>Databases</label>
+            <input
+              type="text"
+              value={data.skills.databases}
+              onChange={(e) => handleSkillChange('databases', e.target.value)}
+            />
+          </div>
+          <div className="field-group">
+            <label>Tools & Platforms</label>
+            <input
+              type="text"
+              value={data.skills.tools}
+              onChange={(e) => handleSkillChange('tools', e.target.value)}
+            />
+          </div>
+          <div className="field-group">
+            <label>Core Concepts</label>
+            <input
+              type="text"
+              value={data.skills.coreConcepts}
+              onChange={(e) => handleSkillChange('coreConcepts', e.target.value)}
+            />
+          </div>
         </div>
 
-        <div className="field-group">
-          <label>Summary</label>
-          <textarea
-            rows="4"
-            placeholder="Write a concise professional summary..."
-            value={data.summary}
-            onChange={(e) => setData({ ...data, summary: e.target.value })}
-          />
+        {/* 5. Projects */}
+        <div className="editor-section-box">
+          <h3>Projects</h3>
+          {data.projects.map((proj, idx) => (
+            <div key={idx} className="sub-item-box">
+              <label className="sub-label">Project #{idx + 1}</label>
+              <input
+                type="text"
+                placeholder="Project Title"
+                value={proj.title}
+                onChange={(e) => handleProjectChange(idx, 'title', e.target.value)}
+                style={{ marginBottom: '4px' }}
+              />
+              <input
+                type="text"
+                placeholder="Tech Stack"
+                value={proj.tech}
+                onChange={(e) => handleProjectChange(idx, 'tech', e.target.value)}
+                style={{ marginBottom: '4px' }}
+              />
+              <input
+                type="text"
+                placeholder="Duration"
+                value={proj.period}
+                onChange={(e) => handleProjectChange(idx, 'period', e.target.value)}
+                style={{ marginBottom: '6px' }}
+              />
+              <label style={{ fontSize: '10px', color: '#64748b' }}>Bullets:</label>
+              {proj.bullets.map((b, bIdx) => (
+                <textarea
+                  key={bIdx}
+                  rows="2"
+                  value={b}
+                  onChange={(e) => handleProjectBulletChange(idx, bIdx, e.target.value)}
+                  style={{ marginBottom: '4px', fontSize: '11px' }}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* 6. Positions of Responsibility */}
+        <div className="editor-section-box">
+          <h3>Positions of Responsibility</h3>
+          {data.responsibilities.map((resp, idx) => (
+            <div key={idx} className="sub-item-box">
+              <label className="sub-label">Role #{idx + 1}</label>
+              <input
+                type="text"
+                placeholder="Role / Title"
+                value={resp.role}
+                onChange={(e) => handleRespChange(idx, 'role', e.target.value)}
+                style={{ marginBottom: '4px' }}
+              />
+              <input
+                type="text"
+                placeholder="Duration"
+                value={resp.period}
+                onChange={(e) => handleRespChange(idx, 'period', e.target.value)}
+                style={{ marginBottom: '6px' }}
+              />
+              {resp.bullets.map((b, bIdx) => (
+                <textarea
+                  key={bIdx}
+                  rows="2"
+                  value={b}
+                  onChange={(e) => handleRespBulletChange(idx, bIdx, e.target.value)}
+                  style={{ marginBottom: '4px', fontSize: '11px' }}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* 7. Achievements */}
+        <div className="editor-section-box">
+          <h3>Achievements & Certifications</h3>
+          {data.achievements.map((ach, idx) => (
+            <div key={idx} className="field-group">
+              <input
+                type="text"
+                value={ach}
+                onChange={(e) => handleAchievementChange(idx, e.target.value)}
+              />
+            </div>
+          ))}
         </div>
 
         <button className="export-btn" onClick={handleDownloadPDF} disabled={downloading}>
-          {downloading ? 'Generating Single Page PDF...' : 'Download Clickable A4 PDF'}
+          {downloading ? 'Generating PDF...' : 'Download Clickable A4 PDF'}
         </button>
       </div>
 
-      {/* A4 Sheet Container */}
+      {/* A4 Sheet Preview Canvas */}
       <div className="preview-canvas-wrapper">
         <div className="a4-sheet" id="resume-sheet">
           {/* Header */}
