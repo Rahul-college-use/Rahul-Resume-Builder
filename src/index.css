@@ -16,8 +16,8 @@ body {
 
 /* Sidebar Styling */
 .editor-sidebar {
-  width: 350px;
-  min-width: 330px;
+  width: 380px;
+  min-width: 350px;
   height: 100vh;
   overflow-y: auto;
   background-color: #ffffff;
@@ -31,8 +31,40 @@ body {
   margin-bottom: 14px;
 }
 
+.editor-section-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+
+.editor-section-box h3 {
+  font-size: 13px;
+  color: #1e293b;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sub-item-box {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.sub-label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: bold;
+  color: #0284c7;
+  margin-bottom: 4px;
+}
+
 .field-group {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .field-group label {
@@ -44,9 +76,11 @@ body {
 }
 
 .field-group input,
-.field-group textarea {
+.field-group textarea,
+.sub-item-box input,
+.sub-item-box textarea {
   width: 100%;
-  padding: 7px 9px;
+  padding: 6px 8px;
   font-size: 12px;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
@@ -55,7 +89,9 @@ body {
 }
 
 .field-group input:focus,
-.field-group textarea:focus {
+.field-group textarea:focus,
+.sub-item-box input:focus,
+.sub-item-box textarea:focus {
   border-color: #1a365d;
 }
 
@@ -70,6 +106,7 @@ body {
   font-size: 13px;
   cursor: pointer;
   margin-top: 10px;
+  margin-bottom: 24px;
 }
 
 .export-btn:hover {
